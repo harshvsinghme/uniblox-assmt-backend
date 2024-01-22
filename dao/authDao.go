@@ -9,3 +9,7 @@ func Authenticate(email string) string {
 func IsAuthenticated(userId string) bool {
 	return dbUtils.InMemoryDBClient.IsAuthenticated(userId)
 }
+
+func Logout(userId string) {
+	dbUtils.InMemoryDBClient.Logout(userId)
+}

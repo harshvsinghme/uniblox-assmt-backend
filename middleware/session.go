@@ -11,7 +11,16 @@ import (
 func SessionMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		errorOut := models.Error{}
-		userId := ctx.GetHeader("userId")
+		cookie, err := ctx.Request.Cookie("userId")
+		// fmt.Println(cookie, err)
+		if err != nil {
+
+			ctx.JSON(http.StatusUnauthorized, gin.H{"errorOut": errorOut})
+			ctx.Abort()
+			return
+		}
+
+		userId := cookie.Value
 		if userId == "" {
 
 			ctx.JSON(http.StatusUnauthorized, gin.H{"errorOut": errorOut})

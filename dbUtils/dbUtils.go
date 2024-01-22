@@ -11,8 +11,14 @@ import (
 
 type IDB interface {
 	GetAllProducts() []models.Product
+	GetProductById(ProdId string) (models.Product, bool)
+
 	Authenticate(email string) string
 	IsAuthenticated(userId string) bool
+	Logout()
+
+	AddtoUserCart(item models.CartItem)
+	GetMyCart(userId string) []models.CartItem
 }
 
 type InMemoryDB struct {
@@ -23,8 +29,8 @@ var InMemoryDBClient InMemoryDB
 
 var users []models.User
 var products []models.Product
-
 var orders []models.Order
+var cart []models.CartItem
 
 func InitDB() {
 	users = []models.User{}
@@ -41,12 +47,27 @@ func InitDB() {
 		log.Println("Error reading products data", err)
 	}
 
+	cart = []models.CartItem{}
+
 	orders = []models.Order{}
 }
 
 func (InMemoryDBClient *InMemoryDB) GetAllProducts() []models.Product {
 
 	return products
+}
+
+func (InMemoryDBClient *InMemoryDB) GetProductById(ProdId string) (currProd models.Product, found bool) {
+
+	for i := range products {
+		currProd = products[i]
+
+		if currProd.ProdId == ProdId {
+			found = true
+			break
+		}
+	}
+	return
 }
 
 func (InMemoryDBClient *InMemoryDB) Authenticate(email string) string {
@@ -91,4 +112,47 @@ func (InMemoryDBClient *InMemoryDB) IsAuthenticated(userId string) bool {
 
 	return found
 
+}
+
+func (InMemoryDBClient *InMemoryDB) Logout(userId string) {
+
+	for i, v := range users {
+		if v.Id == userId {
+			users = append(users[:i], users[i+1:]...)
+			break
+		}
+	}
+	// fmt.Println(users)
+}
+
+func (InMemoryDBClient *InMemoryDB) AddtoUserCart(item models.CartItem) {
+
+	var alreadyExists bool
+
+	for i := range cart {
+
+		currItem := cart[i]
+
+		if currItem.ProdId == item.ProdId && currItem.UserId == item.UserId {
+			alreadyExists = true
+			break
+		}
+	}
+
+	if !alreadyExists {
+		cart = append(cart, item)
+	}
+
+}
+
+func (InMemoryDBClient *InMemoryDB) GetMyCart(userId string) (myCart []models.CartItem) {
+
+	for i := range cart {
+		currItem := cart[i]
+
+		if currItem.UserId == userId {
+			myCart = append(myCart, currItem)
+		}
+	}
+	return
 }

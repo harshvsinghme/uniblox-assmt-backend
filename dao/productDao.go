@@ -9,3 +9,8 @@ func GetAllProducts() []models.Product {
 	products := dbUtils.InMemoryDBClient.GetAllProducts()
 	return products
 }
+
+func GetProductById(ProdId string) (models.Product, bool) {
+	return dbUtils.InMemoryDBClient.GetProductById(ProdId)
+
+}

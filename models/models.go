@@ -5,13 +5,18 @@ type User struct {
 }
 
 type Product struct {
-	Id, Name string
-	Price    float64
+	ProdId, ProdName string
+	ProdPrice        float64
 }
 
 type Order struct {
-	Id, UserId string
-	Items      []Product
+	OrdId, UserId string
+	OrderedItems  []Product
+}
+
+type CartItem struct {
+	Product
+	UserId string
 }
 
 type Error struct {

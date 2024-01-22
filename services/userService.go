@@ -3,7 +3,6 @@ package services
 import (
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	manager "github.com/harshvsinghme/uniblox-assmt-backend/business"
@@ -11,14 +10,16 @@ import (
 	"github.com/harshvsinghme/uniblox-assmt-backend/utils"
 )
 
-type AuthService struct {
+type UserService struct {
 }
 
-func (service AuthService) AuthenticateUser(ctx *gin.Context) {
+func (service UserService) AddItemToMyCart(ctx *gin.Context) {
 	errorOut := models.Error{}
 
+	userId := utils.GetValueFromContext(ctx, "userId")
+
 	type ReqBody struct {
-		Email string `json:"email"`
+		ProdId string
 	}
 
 	var reqBody ReqBody
@@ -30,25 +31,21 @@ func (service AuthService) AuthenticateUser(ctx *gin.Context) {
 		return
 	}
 
-	userId := manager.AuthenticateUser(reqBody.Email)
+	manager.AddItemToMyCart(userId, reqBody.ProdId)
 
-	ctx.SetCookie("userId", userId, int(2*time.Hour), "/", "localhost", false, true) // "userId" is the cookie name
 	ctx.JSON(http.StatusOK, gin.H{
 		"errorOut": errorOut,
-		"userId":   userId,
 	})
 }
 
-func (service AuthService) Logout(ctx *gin.Context) {
+func (service UserService) GetMyCart(ctx *gin.Context) {
 	errorOut := models.Error{}
-
 	userId := utils.GetValueFromContext(ctx, "userId")
 
-	manager.Logout(userId)
-
-	ctx.SetCookie("userId", "", -1, "/", "localhost", false, true) // clear cookie
+	cart := manager.GetMyCart(userId)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"errorOut": errorOut,
+		"cart":     cart,
 	})
 }
