@@ -13,8 +13,15 @@ type globalconfig struct {
 type listofsecrets struct {
 }
 
+type enum struct {
+	GeneralUser string
+	AdminUser   string
+	AnyUser     string
+}
+
 var SECRETS = listofsecrets{}
 var CONFIG = globalconfig{}
+var ENUM = enum{}
 
 func LoadGlobals(envPath string) {
 
@@ -24,5 +31,9 @@ func LoadGlobals(envPath string) {
 	}
 
 	CONFIG.NthOrderForDiscount = 3
+
+	ENUM.GeneralUser = "GENERAL"
+	ENUM.AdminUser = "ADMIN"
+	ENUM.AnyUser = "ANY"
 
 }

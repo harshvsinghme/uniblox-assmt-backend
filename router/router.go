@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/harshvsinghme/uniblox-assmt-backend/global"
 	"github.com/harshvsinghme/uniblox-assmt-backend/middleware"
 	"github.com/harshvsinghme/uniblox-assmt-backend/models"
 	"github.com/harshvsinghme/uniblox-assmt-backend/services"
@@ -23,14 +24,14 @@ func InitRouter() *gin.Engine {
 
 	//Auth-Service
 	router.POST("/auth-service/users/authenticate", AuthService.AuthenticateUser)
-	router.PUT("/auth-service/users/logout", middleware.SessionMiddleware(), AuthService.Logout)
+	router.PUT("/auth-service/users/logout", middleware.SessionMiddleware(global.ENUM.AnyUser), AuthService.Logout)
 
 	//User-Service
-	router.POST("/user-service/cart/add", middleware.SessionMiddleware(), UserService.AddItemToMyCart)
-	router.GET("/user-service/cart/get", middleware.SessionMiddleware(), UserService.GetMyCart)
+	router.POST("/user-service/cart/add", middleware.SessionMiddleware(global.ENUM.GeneralUser), UserService.AddItemToMyCart)
+	router.GET("/user-service/cart/get", middleware.SessionMiddleware(global.ENUM.GeneralUser), UserService.GetMyCart)
 
 	//Product-Service
-	router.GET("/product-service/products/get", middleware.SessionMiddleware(), ProductService.GetAllProducts)
+	router.GET("/product-service/products/get", middleware.SessionMiddleware(global.ENUM.GeneralUser), ProductService.GetAllProducts)
 
 	return router
 }

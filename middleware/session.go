@@ -8,7 +8,7 @@ import (
 	"github.com/harshvsinghme/uniblox-assmt-backend/models"
 )
 
-func SessionMiddleware() gin.HandlerFunc {
+func SessionMiddleware(userType string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		errorOut := models.Error{}
 		cookie, err := ctx.Request.Cookie("userId")
@@ -28,9 +28,9 @@ func SessionMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		IsAuthenticated := dao.IsAuthenticated(userId)
-		if !IsAuthenticated {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"errorOut": errorOut})
+		authStatus := dao.IsAuthenticated(userId, userType)
+		if authStatus != http.StatusOK {
+			ctx.JSON(authStatus, gin.H{"errorOut": errorOut})
 			ctx.Abort()
 			return
 		}

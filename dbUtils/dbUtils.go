@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"net/http"
 
+	"github.com/harshvsinghme/uniblox-assmt-backend/global"
 	"github.com/harshvsinghme/uniblox-assmt-backend/models"
 	"github.com/twinj/uuid"
 )
@@ -14,7 +16,7 @@ type IDB interface {
 	GetProductById(ProdId string) (models.Product, bool)
 
 	Authenticate(email string) string
-	IsAuthenticated(userId string) bool
+	IsAuthenticated(userId string) int
 	Logout()
 
 	AddtoUserCart(item models.CartItem)
@@ -97,15 +99,21 @@ func (InMemoryDBClient *InMemoryDB) Authenticate(email string) string {
 
 }
 
-func (InMemoryDBClient *InMemoryDB) IsAuthenticated(userId string) bool {
+func (InMemoryDBClient *InMemoryDB) IsAuthenticated(userId string, userType string) int {
 
 	userRecord := models.User{}
-	found := false
+	found := http.StatusUnauthorized
 
 	for i := range users {
 		userRecord = users[i]
 		if userRecord.Id == userId {
-			found = true
+
+			found = http.StatusForbidden
+
+			if (userType == global.ENUM.AnyUser) || (userType == global.ENUM.AdminUser && userRecord.Email == "admin@gmail.com") || (userType == global.ENUM.GeneralUser && userRecord.Email != "admin@gmail.com") {
+				found = http.StatusOK
+			}
+
 			break
 		}
 	}
