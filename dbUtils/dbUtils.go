@@ -6,10 +6,12 @@ import (
 	"log"
 
 	"github.com/harshvsinghme/uniblox-assmt-backend/models"
+	"github.com/twinj/uuid"
 )
 
 type IDB interface {
 	GetAllProducts() ([]models.Product, error)
+	Authenticate(email string) string
 }
 
 type InMemoryDB struct {
@@ -45,4 +47,31 @@ func (InMemoryDBClient *InMemoryDB) GetAllProducts() ([]models.Product, error) {
 	var err error
 
 	return products, err
+}
+
+func (InMemoryDBClient *InMemoryDB) Authenticate(email string) string {
+
+	userRecord := models.User{}
+	alreadyExists := false
+
+	for i := range users {
+		userRecord = users[i]
+		if userRecord.Email == email {
+			alreadyExists = true
+			break
+		}
+	}
+
+	if alreadyExists {
+		return userRecord.Id
+	}
+
+	newUser := models.User{
+		Id:    uuid.NewV4().String(),
+		Email: email,
+	}
+	users = append(users, newUser)
+
+	return newUser.Id
+
 }
