@@ -1,0 +1,42 @@
+[
+  {
+    "Id": "323fdffc-25ac-48a0-b98e-e3f5a9ede665",
+    "Name": "Software Architect's Handbook",
+    "Price": 3279
+  },
+  {
+    "Id": "060ecf97-cb11-475c-8cf3-0869d0755c9e",
+    "Name": "Shoulder Bag for Men & Women",
+    "Price": 899
+  },
+  {
+    "Id": "4b16493f-1497-45fc-ab53-d803ceac1be2",
+    "Name": "Gym Shoes for Men",
+    "Price": 617
+  },
+  {
+    "Id": "fc92880f-376b-4dd2-b510-4d85580e5f46",
+    "Name": "Money Wallet Zipper Coin Purse for Men Women",
+    "Price": 499
+  },
+  {
+    "Id": "d4bb4e76-e881-4e14-930e-747476d0fa2e",
+    "Name": "Travel Adapter and Wall Charger with USB Ports",
+    "Price": 587
+  },
+  {
+    "Id": "38e2fccf-d728-414f-9eb0-60eebaa354a1",
+    "Name": "Colorpro Professional FHD IPS Monitor",
+    "Price": 8666
+  },
+  {
+    "Id": "176b9f89-7d35-48f3-bfb1-1948ab0024f2",
+    "Name": "Apple MacBook Air Laptop M1 chip",
+    "Price": 83990
+  },
+  {
+    "Id": "47b0f22d-4c10-4782-8e0a-34e9c3552b73",
+    "Name": "OnePlus Nord CE 3 Lite 5G",
+    "Price": 19999
+  }
+]
