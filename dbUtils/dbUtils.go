@@ -10,8 +10,9 @@ import (
 )
 
 type IDB interface {
-	GetAllProducts() ([]models.Product, error)
+	GetAllProducts() []models.Product
 	Authenticate(email string) string
+	IsAuthenticated(userId string) bool
 }
 
 type InMemoryDB struct {
@@ -43,10 +44,9 @@ func InitDB() {
 	orders = []models.Order{}
 }
 
-func (InMemoryDBClient *InMemoryDB) GetAllProducts() ([]models.Product, error) {
-	var err error
+func (InMemoryDBClient *InMemoryDB) GetAllProducts() []models.Product {
 
-	return products, err
+	return products
 }
 
 func (InMemoryDBClient *InMemoryDB) Authenticate(email string) string {
@@ -73,5 +73,22 @@ func (InMemoryDBClient *InMemoryDB) Authenticate(email string) string {
 	users = append(users, newUser)
 
 	return newUser.Id
+
+}
+
+func (InMemoryDBClient *InMemoryDB) IsAuthenticated(userId string) bool {
+
+	userRecord := models.User{}
+	found := false
+
+	for i := range users {
+		userRecord = users[i]
+		if userRecord.Id == userId {
+			found = true
+			break
+		}
+	}
+
+	return found
 
 }
