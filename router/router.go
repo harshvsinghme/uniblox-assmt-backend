@@ -16,6 +16,7 @@ func InitRouter() *gin.Engine {
 	AuthService := services.AuthService{}
 	UserService := services.UserService{}
 	ProductService := services.ProductService{}
+	OrderService := services.OrderService{}
 
 	router.GET("/status", func(ctx *gin.Context) {
 		errorOut := models.Error{}
@@ -32,6 +33,9 @@ func InitRouter() *gin.Engine {
 
 	//Product-Service
 	router.GET("/product-service/products/get", middleware.SessionMiddleware(global.ENUM.GeneralUser), ProductService.GetAllProducts)
+
+	//Order-Service
+	router.POST("/order-service/coupon/set", middleware.SessionMiddleware(global.ENUM.AdminUser), OrderService.SetCouponCode)
 
 	return router
 }

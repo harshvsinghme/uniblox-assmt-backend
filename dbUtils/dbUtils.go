@@ -2,6 +2,7 @@ package dbUtils
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -21,6 +22,9 @@ type IDB interface {
 
 	AddtoUserCart(item models.CartItem)
 	GetMyCart(userId string) []models.CartItem
+
+	SetCouponCode(code string) error
+	GetCouponCode() string
 }
 
 type InMemoryDB struct {
@@ -33,6 +37,7 @@ var users []models.User
 var products []models.Product
 var orders []models.Order
 var cart []models.CartItem
+var couponCode = "UNIB10%"
 
 func InitDB() {
 	users = []models.User{}
@@ -163,4 +168,17 @@ func (InMemoryDBClient *InMemoryDB) GetMyCart(userId string) (myCart []models.Ca
 		}
 	}
 	return
+}
+
+func (InMemoryDBClient *InMemoryDB) SetCouponCode(code string) (err error) {
+	if len(code) >= 5 {
+		couponCode = code
+		return
+	}
+	return errors.New("coupon code must be atleast 5 chars long")
+}
+
+func (InMemoryDBClient *InMemoryDB) GetCouponCode() string {
+
+	return couponCode
 }
