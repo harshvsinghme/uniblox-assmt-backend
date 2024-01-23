@@ -34,6 +34,20 @@ The UniBlox Ecommerce Backend is designed to simulate the backend processes of a
 git clone https://github.com/harshvsinghme/uniblox-assmt-backend.git
 ```
 
+Get .env file and save that at the same directory level of the main.go file.
+
+And, for this project .env file can be empty
+
+```bash
+go mod tidy
+```
+
+### Run Server
+
+```bash
+go run main.go
+```
+
 ## Documentation
 
 #### https://documenter.getpostman.com/view/16741530/2s9YymHkPj
