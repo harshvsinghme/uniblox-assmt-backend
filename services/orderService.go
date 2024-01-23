@@ -41,3 +41,28 @@ func (service OrderService) SetCouponCode(ctx *gin.Context) {
 		"errorOut": errorOut,
 	})
 }
+
+func (service OrderService) Checkout(ctx *gin.Context) {
+	errorOut := models.Error{}
+
+	userId := utils.GetValueFromContext(ctx, "userId")
+
+	type ReqBody struct {
+		CouponCode string
+	}
+
+	var reqBody ReqBody
+
+	if err := ctx.BindJSON(&reqBody); err != nil {
+		log.Println(err)
+		utils.GetError(&errorOut, "invalid request body", 400)
+		ctx.JSON(http.StatusBadRequest, gin.H{"errorOut": errorOut})
+		return
+	}
+
+	manager.Checkout(userId, reqBody.CouponCode)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"errorOut": errorOut,
+	})
+}

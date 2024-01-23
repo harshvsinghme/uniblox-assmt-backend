@@ -25,6 +25,9 @@ type IDB interface {
 
 	SetCouponCode(code string) error
 	GetCouponCode() string
+
+	PlaceOrder(newOrder models.Order)
+	GetAllOrders() []models.Order
 }
 
 type InMemoryDB struct {
@@ -182,4 +185,12 @@ func (InMemoryDBClient *InMemoryDB) SetCouponCode(code string) (err error) {
 func (InMemoryDBClient *InMemoryDB) GetCouponCode() string {
 
 	return couponCode
+}
+
+func (InMemoryDBClient *InMemoryDB) GetAllOrders() []models.Order {
+	return orders
+}
+
+func (InMemoryDBClient *InMemoryDB) PlaceOrder(newOrder models.Order) {
+	orders = append(orders, newOrder)
 }

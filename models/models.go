@@ -10,8 +10,14 @@ type Product struct {
 }
 
 type Order struct {
-	OrdId, UserId, TotalAmount, TotalPayable, CouponCode string
-	OrderedItems                                         []Product
+	OrdId, UserId, CouponCode string
+	TotalAmount, TotalPayable float64
+	OrderedItems              []OrderItem
+}
+
+type OrderItem struct {
+	Product
+	Quantity int
 }
 
 type CartItem struct {

@@ -36,6 +36,7 @@ func InitRouter() *gin.Engine {
 
 	//Order-Service
 	router.POST("/order-service/coupon/set", middleware.SessionMiddleware(global.ENUM.AdminUser), OrderService.SetCouponCode)
+	router.POST("/order-service/cart/checkout", middleware.SessionMiddleware(global.ENUM.GeneralUser), OrderService.Checkout)
 
 	return router
 }
