@@ -14,8 +14,9 @@ func AddItemToMyCart(userId, ProdId string) {
 	}
 
 	cartItem := models.CartItem{
-		UserId:  userId,
-		Product: product,
+		UserId:   userId,
+		Product:  product,
+		Quantity: 1,
 	}
 	dao.AddItemToMyCart(cartItem)
 }

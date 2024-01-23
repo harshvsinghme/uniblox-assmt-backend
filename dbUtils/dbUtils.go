@@ -148,6 +148,7 @@ func (InMemoryDBClient *InMemoryDB) AddtoUserCart(item models.CartItem) {
 
 		if currItem.ProdId == item.ProdId && currItem.UserId == item.UserId {
 			alreadyExists = true
+			cart[i].Quantity += 1
 			break
 		}
 	}
