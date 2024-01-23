@@ -66,3 +66,16 @@ func (service OrderService) Checkout(ctx *gin.Context) {
 		"errorOut": errorOut,
 	})
 }
+
+func (service OrderService) OrdersSummary(ctx *gin.Context) {
+	errorOut := models.Error{}
+
+	var orderSummary models.OrderSummary
+
+	orderSummary = manager.OrdersSummary()
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"errorOut":     errorOut,
+		"orderSummary": orderSummary,
+	})
+}

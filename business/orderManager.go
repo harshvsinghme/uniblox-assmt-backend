@@ -42,11 +42,12 @@ func Checkout(userId, CouponCode string) {
 	newOrder.TotalAmount = calculateTotalAmount(&orderedItems)
 	newOrder.TotalPayable = newOrder.TotalAmount
 
-	var atleastOneOrder = ordersCount >= 1
-	var isDiscApplicable = (ordersCount % global.CONFIG.NthOrderForDiscount) == 0
+	var isDiscApplicable = ordersCount > 0 && ordersCount%global.CONFIG.NthOrderForDiscount == 0
 	var validCouponCode = activeCouponCode == CouponCode
 
-	if atleastOneOrder && isDiscApplicable && validCouponCode {
+	// fmt.Println(isDiscApplicable, validCouponCode)
+
+	if isDiscApplicable && validCouponCode {
 
 		newOrder.CouponCode = CouponCode
 
@@ -74,4 +75,29 @@ func calculateTotalAmount(orderedItems *[]models.OrderItem) (total float64) {
 	}
 
 	return total
+}
+
+func OrdersSummary() (orderSummary models.OrderSummary) {
+
+	orders := dao.GetAllOrders()
+	var currentOrder models.Order
+	setOfCoupons := map[string]bool{}
+
+	for i := range orders {
+		currentOrder = orders[i]
+
+		orderSummary.ItemsPurchased += len(currentOrder.OrderedItems)
+		orderSummary.TotalPurchaseAmount += currentOrder.TotalAmount
+		orderSummary.TotalDiscountAmount += currentOrder.TotalPayable
+
+		if currentOrder.CouponCode != "" {
+			setOfCoupons[currentOrder.CouponCode] = true
+		}
+
+	}
+	for k := range setOfCoupons {
+		orderSummary.DiscountCodes = append(orderSummary.DiscountCodes, k)
+	}
+
+	return
 }
